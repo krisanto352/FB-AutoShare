@@ -611,4 +611,5 @@ if __name__ == '__main__':
     if not os.path.exists(CONFIG_FILE):
         save_config(DEFAULT_CONFIG)
 
-    app.run(debug=True)
+    app.run(host="0.0.0.0",port=5000)
+    
