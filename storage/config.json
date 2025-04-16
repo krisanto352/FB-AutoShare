@@ -1,5 +1,5 @@
 {
-    "share_delay": 10,
+    "share_delay": 5,
     "retry_delay": 60,
     "max_retries": 3
 }
