@@ -47,6 +47,12 @@ flask run
 http://127.0.0.1:5000
 ```
 
+
+
+# ⚠️GET TOKEN COOKIE⚠️
+Get cookie and token via (GET TOKEN COOKIE)[https://chromewebstore.google.com/detail/get-token-cookie/naciaagbkifhpnoodlkhbejjldaiffcm]
+
+
 ## Usage
 
 1. Log in with your Facebook cookies and access token
