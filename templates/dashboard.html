@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - GRANDPA FB Share Tool{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-user me-2"></i> User Info
+            </div>
+            <div class="card-body">
+                <div class="digital-box">
+                    <div class="mb-3">
+                        <label class="form-label text-primary">Name</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark text-secondary">
+                                <i class="fas fa-user"></i>
+                            </span>
+                            <input type="text" class="form-control" value="{{ user_name }}" readonly>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-primary">User ID</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark text-secondary">
+                                <i class="fas fa-id-card"></i>
+                            </span>
+                            <input type="text" class="form-control" value="{{ user_id }}" readonly>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-primary">IP Address</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark text-secondary">
+                                <i class="fas fa-network-wired"></i>
+                            </span>
+                            <input type="text" class="form-control" value="{{ ip }}" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header">
+                <i class="fas fa-cog me-2"></i> Quick Actions
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('settings') }}" class="btn btn-info">
+                        <i class="fas fa-sliders-h me-2"></i> Configure Settings
+                    </a>
+                    <a href="{{ url_for('logout') }}" class="btn btn-danger">
+                        <i class="fas fa-sign-out-alt me-2"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-share-alt me-2"></i> Share Facebook Post
+            </div>
+            <div class="card-body">
+                <div class="digital-box">
+                    <h5 class="digital-title">Share Configuration</h5>
+                    <p class="digital-text">
+                        Enter the Facebook post link you want to share and the number of times to share it.
+                    </p>
+                </div>
+
+                <form method="POST" action="{{ url_for('share') }}" id="shareForm">
+                    {{ form.hidden_tag() }}
+
+                    <div class="mb-3">
+                        <label for="link" class="form-label">
+                            <i class="fas fa-link me-1"></i> Post Link
+                        </label>
+                        {{ form.link(class="form-control", placeholder="Enter Facebook post link") }}
+                        <div class="form-text text-info">Example: https://www.facebook.com/username/posts/postid</div>
+                        {% if form.link.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.link.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="limit" class="form-label">
+                            <i class="fas fa-hashtag me-1"></i> Share Limit
+                        </label>
+                        {{ form.limit(class="form-control", placeholder="Number of times to share (1-100)", value="1") }}
+                        <div class="form-text text-info">How many times to share the post (1-100)</div>
+                        {% if form.limit.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.limit.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-success btn-lg", id="shareButton") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const shareForm = document.getElementById('shareForm');
+        const linkInput = document.getElementById('link');
+
+        // Auto-focus on the link input
+        if (linkInput) {
+            linkInput.focus();
+        }
+
+        // Add validation for the form
+        if (shareForm) {
+            shareForm.addEventListener('submit', function(e) {
+                const link = document.getElementById('link').value;
+                const limit = document.getElementById('limit').value;
+
+                // Basic validation
+                if (!link || !link.startsWith('http')) {
+                    e.preventDefault();
+                    alert('Please enter a valid Facebook post link starting with http:// or https://');
+                    return false;
+                }
+
+                if (!limit || isNaN(limit) || limit < 1 || limit > 100) {
+                    e.preventDefault();
+                    alert('Please enter a valid share limit between 1 and 100');
+                    return false;
+                }
+
+                // Disable the button to prevent double submission
+                document.getElementById('shareButton').disabled = true;
+                document.getElementById('shareButton').innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Processing...';
+            });
+        }
+    });
+</script>
+{% endblock %}

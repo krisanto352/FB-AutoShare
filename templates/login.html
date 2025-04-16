@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Login - GRANDPA FB Share Tool{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="ascii-art">
+ ██████╗ ██████╗  █████╗ ███╗  ██╗██████╗ ██████╗  █████╗
+██╔════╝ ██╔══██╗██╔══██╗████╗ ██║██╔══██╗██╔══██╗██╔══██╗
+██║  ███╗██████╔╝███████║██╔██╗██║██║  ██║██████╔╝███████║
+██║   ██║██╔══██╗██╔══██║██║╚████║██║  ██║██╔═══╝ ██╔══██║
+╚██████╔╝██║  ██║██║  ██║██║ ╚███║██████╔╝██║     ██║  ██║
+ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚══╝╚═════╝ ╚═╝     ╚═╝  ╚═╝
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-sign-in-alt me-2"></i> Login
+            </div>
+            <div class="card-body">
+                <div class="digital-box">
+                    <h5 class="digital-title">Facebook Authentication</h5>
+                    <p class="digital-text" style="color: #20c997; font-size: 1.1rem; font-weight: 500;">
+                        Enter your Facebook cookies AND access token to use the auto share tool.
+                        <br>
+                        <span style="color: #0dcaf0; font-size: 0.9rem;">(Both are required for the tool to work properly)</span>
+                    </p>
+                </div>
+
+                <form method="POST" action="{{ url_for('login') }}">
+                    {{ form.hidden_tag() }}
+
+                    <div class="mb-3">
+                        <label for="cookie" class="form-label" style="color: #0dcaf0; font-size: 1.1rem;">
+                            <i class="fas fa-cookie me-1"></i> Facebook Cookies
+                        </label>
+                        {{ form.cookie(class="form-control", placeholder="Enter your Facebook cookies", style="background-color: #1a1d20; color: #ffffff; border: 2px solid #0d6efd; font-size: 1.05rem; padding: 12px;") }}
+                        <div class="form-text text-info">Required for authentication</div>
+                        {% if form.cookie.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.cookie.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="token" class="form-label" style="color: #0dcaf0; font-size: 1.1rem;">
+                            <i class="fas fa-key me-1"></i> Access Token
+                        </label>
+                        {{ form.token(class="form-control", placeholder="Enter your Facebook access token", style="background-color: #1a1d20; color: #ffffff; border: 2px solid #0d6efd; font-size: 1.05rem; padding: 12px;") }}
+                        <div class="form-text text-info">Required for authentication</div>
+                        {% if form.token.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.token.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-primary btn-lg", style="font-size: 1.2rem; padding: 12px; background-color: #0d6efd; border: none; font-weight: bold; margin-top: 10px;") }}
+                    </div>
+                </form>
+
+                <div class="loading mt-3">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="loading-text mt-2">Verifying credentials...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header">
+                <i class="fas fa-info-circle me-2"></i> How to Get Cookies and Token
+            </div>
+            <div class="card-body">
+                <div class="accordion" id="helpAccordion">
+                    <div class="accordion-item bg-dark text-white border-primary">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button collapsed bg-dark text-white" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                                <i class="fas fa-cookie me-2"></i> How to get Facebook Cookies
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#helpAccordion">
+                            <div class="accordion-body">
+                                <ol>
+                                    <li>Log in to your Facebook account in a web browser</li>
+                                    <li>Press F12 to open Developer Tools</li>
+                                    <li>Go to the "Network" tab</li>
+                                    <li>Refresh the page</li>
+                                    <li>Click on any request to facebook.com</li>
+                                    <li>Look for "Cookie" in the request headers</li>
+                                    <li>Copy the entire cookie string</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item bg-dark text-white border-primary">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed bg-dark text-white" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                                <i class="fas fa-key me-2"></i> How to get Facebook Access Token
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#helpAccordion">
+                            <div class="accordion-body">
+                                <ol>
+                                    <li>Log in to your Facebook account in a web browser</li>
+                                    <li>Go to <a href="https://developers.facebook.com/" target="_blank" class="text-info">Facebook for Developers</a></li>
+                                    <li>Create a new app or use an existing one</li>
+                                    <li>Go to Tools & Support > Graph API Explorer</li>
+                                    <li>Click "Generate Access Token"</li>
+                                    <li>Select the necessary permissions (user_posts, publish_actions)</li>
+                                    <li>Copy the generated token</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}GRANDPA FB Share Tool{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0dcaf0;    /* Cyan */
+            --secondary-color: #20c997;  /* Green */
+            --accent-color: #0d6efd;     /* Blue */
+            --warning-color: #ffc107;    /* Yellow */
+            --error-color: #dc3545;      /* Red */
+            --heading-color: #0dcaf0;    /* Light Cyan */
+            --dark-bg: #212529;
+            --darker-bg: #1a1d20;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: #f8f9fa;
+            font-family: 'Courier New', monospace;
+        }
+
+        .navbar {
+            background-color: var(--darker-bg) !important;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .card {
+            background-color: var(--darker-bg);
+            border: 1px solid var(--accent-color);
+            border-radius: 0;
+            box-shadow: 0 0 10px rgba(13, 110, 253, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            background-color: var(--accent-color);
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 0 !important;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .btn-success {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+
+        .btn-info {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        .form-control {
+            background-color: #1a1d20;
+            border: 2px solid var(--accent-color);
+            color: white;
+            font-size: 1.05rem;
+            padding: 12px;
+        }
+
+        .form-control:focus {
+            background-color: #1a1d20;
+            color: white;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(13, 202, 240, 0.25);
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1rem;
+        }
+
+        .digital-box {
+            border: 2px solid var(--accent-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .digital-box::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            width: 10px;
+            height: 10px;
+            background-color: var(--accent-color);
+        }
+
+        .digital-box::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            width: 10px;
+            height: 10px;
+            background-color: var(--accent-color);
+        }
+
+        .digital-title {
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--accent-color);
+            padding-bottom: 5px;
+        }
+
+        .digital-text {
+            color: var(--secondary-color);
+            font-family: 'Courier New', monospace;
+        }
+
+        .alert {
+            border-radius: 0;
+            border-left: 5px solid;
+        }
+
+        .alert-success {
+            background-color: rgba(32, 201, 151, 0.2);
+            border-left-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+
+        .alert-danger {
+            background-color: rgba(220, 53, 69, 0.2);
+            border-left-color: var(--error-color);
+            color: var(--error-color);
+        }
+
+        .alert-warning {
+            background-color: rgba(255, 193, 7, 0.2);
+            border-left-color: var(--warning-color);
+            color: var(--warning-color);
+        }
+
+        .alert-info {
+            background-color: rgba(13, 202, 240, 0.2);
+            border-left-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        /* ASCII Art styling */
+        .ascii-art {
+            font-family: monospace;
+            white-space: pre;
+            font-size: 0.7rem;
+            line-height: 1.2;
+            color: var(--secondary-color);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        @media (min-width: 768px) {
+            .ascii-art {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .loading-text {
+            color: var(--primary-color);
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* Status indicators */
+        .status-success {
+            color: var(--secondary-color);
+        }
+
+        .status-error {
+            color: var(--error-color);
+        }
+
+        .status-warning {
+            color: var(--warning-color);
+        }
+
+        .status-info {
+            color: var(--primary-color);
+        }
+
+        /* Status counters */
+        .status-counters {
+            margin: 15px 0;
+        }
+
+        .status-counter {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            border: 1px solid;
+        }
+
+        .status-counter span {
+            display: block;
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .status-counter small {
+            display: block;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .success-counter {
+            background-color: rgba(32, 201, 151, 0.1);
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+
+        .error-counter {
+            background-color: rgba(220, 53, 69, 0.1);
+            border-color: var(--error-color);
+            color: var(--error-color);
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse-animation {
+            animation: pulse 1s infinite;
+        }
+
+        /* Console-like output */
+        .console {
+            background-color: #000;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            padding: 10px;
+            border: 1px solid var(--accent-color);
+            height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            border-radius: 5px;
+            box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.2);
+        }
+
+        .console-line {
+            margin: 0;
+            padding: 2px 0;
+            line-height: 1.4;
+            font-size: 0.95rem;
+            text-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
+        }
+
+        .console-success {
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+
+        .console-error {
+            color: var(--error-color);
+            font-weight: bold;
+        }
+
+        .console-warning {
+            color: var(--warning-color);
+            font-weight: bold;
+        }
+
+        .console-info {
+            color: var(--primary-color);
+        }
+
+        /* GRANDPA ASCII Art */
+        .grandpa-ascii {
+            font-family: monospace;
+            white-space: pre;
+            font-size: 0.7rem;
+            line-height: 1.2;
+            color: var(--primary-color);
+            text-align: center;
+            margin: 10px 0;
+            text-shadow: 0 0 5px rgba(13, 202, 240, 0.5);
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <i class="fas fa-share-alt me-2"></i>GRANDPA FB Share
+            </a>
+            {% if session.get('token') %}
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('dashboard') }}">
+                            <i class="fas fa-tachometer-alt me-1"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('settings') }}">
+                            <i class="fas fa-cog me-1"></i> Settings
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('logout') }}">
+                            <i class="fas fa-sign-out-alt me-1"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category if category != 'error' else 'danger' }} alert-dismissible fade show">
+                        {% if category == 'success' %}
+                            <i class="fas fa-check-circle me-2"></i>
+                        {% elif category == 'error' or category == 'danger' %}
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                        {% elif category == 'warning' %}
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                        {% else %}
+                            <i class="fas fa-info-circle me-2"></i>
+                        {% endif %}
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer class="mt-5 py-3 text-center text-muted">
+        <div class="container">
+            <p>GRANDPA FB Share Tool &copy; 2023</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Show loading animation when forms are submitted
+        document.addEventListener('DOMContentLoaded', function() {
+            const forms = document.querySelectorAll('form');
+            const loading = document.querySelector('.loading');
+
+            if (forms.length > 0 && loading) {
+                forms.forEach(form => {
+                    form.addEventListener('submit', function() {
+                        loading.style.display = 'block';
+                    });
+                });
+            }
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

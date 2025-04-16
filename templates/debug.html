@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}Debug Info - GRANDPA FB Share Tool{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-warning text-dark">
+                <i class="fas fa-bug me-2"></i> Debug Information
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Warning:</strong> This page contains sensitive information. Do not share screenshots or data from this page.
+                </div>
+                
+                <h4 class="digital-title">Application Info</h4>
+                <div class="table-responsive">
+                    <table class="table table-dark table-bordered">
+                        <tr>
+                            <th>Debug Mode</th>
+                            <td>{{ debug_data.app_info.debug }}</td>
+                        </tr>
+                        <tr>
+                            <th>Current Time</th>
+                            <td>{{ debug_data.app_info.time }}</td>
+                        </tr>
+                        <tr>
+                            <th>Python Version</th>
+                            <td>{{ debug_data.app_info.python_version }}</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <h4 class="digital-title mt-4">Configuration</h4>
+                <div class="table-responsive">
+                    <table class="table table-dark table-bordered">
+                        {% for key, value in debug_data.config.items() %}
+                        <tr>
+                            <th>{{ key }}</th>
+                            <td>{{ value }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                
+                <h4 class="digital-title mt-4">Session Data</h4>
+                <div class="table-responsive">
+                    <table class="table table-dark table-bordered">
+                        {% for key, value in debug_data.session.items() %}
+                        <tr>
+                            <th>{{ key }}</th>
+                            <td>
+                                {% if key == 'token' or key == 'cookies' %}
+                                <span class="text-warning">***REDACTED***</span>
+                                {% else %}
+                                {{ value }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                
+                <h4 class="digital-title mt-4">Request Info</h4>
+                <div class="table-responsive">
+                    <table class="table table-dark table-bordered">
+                        {% for key, value in debug_data.request_info.items() %}
+                        <tr>
+                            <th>{{ key }}</th>
+                            <td>{{ value }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                
+                <h4 class="digital-title mt-4">Recent Log Entries</h4>
+                <div class="console" style="height: 400px;">
+                    {% for line in log_lines %}
+                        <p class="console-line 
+                            {% if 'ERROR' in line %}console-error
+                            {% elif 'WARNING' in line %}console-warning
+                            {% elif 'INFO' in line %}console-info
+                            {% else %}console-line{% endif %}">
+                            {{ line }}
+                        </p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-primary">
+                <i class="fas fa-arrow-left me-2"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Auto-scroll console to bottom
+        const console = document.querySelector('.console');
+        if (console) {
+            console.scrollTop = console.scrollHeight;
+        }
+    });
+</script>
+{% endblock %}

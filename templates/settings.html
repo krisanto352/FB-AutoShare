@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - GRANDPA FB Share Tool{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-cog me-2"></i> Configure Settings
+            </div>
+            <div class="card-body">
+                <div class="digital-box">
+                    <h5 class="digital-title">Share Configuration</h5>
+                    <p class="digital-text">
+                        Adjust the settings below to configure how the sharing process works.
+                        These settings help avoid Facebook's spam protection.
+                    </p>
+                </div>
+                
+                <form method="POST" action="{{ url_for('settings') }}">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-3">
+                        <label for="share_delay" class="form-label">
+                            <i class="fas fa-clock me-1"></i> Share Delay (seconds)
+                        </label>
+                        <div class="input-group">
+                            {{ form.share_delay(class="form-control", min="1") }}
+                            <span class="input-group-text bg-dark text-secondary">seconds</span>
+                        </div>
+                        <small class="text-muted">Time to wait between each share. Higher values reduce the chance of being blocked.</small>
+                        {% if form.share_delay.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.share_delay.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="retry_delay" class="form-label">
+                            <i class="fas fa-redo me-1"></i> Retry Delay (seconds)
+                        </label>
+                        <div class="input-group">
+                            {{ form.retry_delay(class="form-control", min="1") }}
+                            <span class="input-group-text bg-dark text-secondary">seconds</span>
+                        </div>
+                        <small class="text-muted">Time to wait before retrying after an error. Higher values help bypass temporary blocks.</small>
+                        {% if form.retry_delay.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.retry_delay.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="max_retries" class="form-label">
+                            <i class="fas fa-sync me-1"></i> Max Retries
+                        </label>
+                        {{ form.max_retries(class="form-control", min="1", max="10") }}
+                        <small class="text-muted">Maximum number of retry attempts per share before giving up.</small>
+                        {% if form.max_retries.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.max_retries.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-success") }}
+                    </div>
+                </form>
+                
+                <div class="loading mt-3">
+                    <div class="spinner-border text-success" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="loading-text mt-2">Saving settings...</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-header">
+                <i class="fas fa-info-circle me-2"></i> Recommended Settings
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-dark table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Setting</th>
+                                <th>Low Risk</th>
+                                <th>Medium Risk</th>
+                                <th>High Risk</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Share Delay</td>
+                                <td class="text-success">60+ seconds</td>
+                                <td class="text-warning">30-60 seconds</td>
+                                <td class="text-danger">10-30 seconds</td>
+                            </tr>
+                            <tr>
+                                <td>Retry Delay</td>
+                                <td class="text-success">300+ seconds</td>
+                                <td class="text-warning">120-300 seconds</td>
+                                <td class="text-danger">60-120 seconds</td>
+                            </tr>
+                            <tr>
+                                <td>Max Retries</td>
+                                <td class="text-success">1-2</td>
+                                <td class="text-warning">3-5</td>
+                                <td class="text-danger">6+</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Warning:</strong> Using aggressive settings may result in your account being temporarily blocked by Facebook.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
