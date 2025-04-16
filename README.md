@@ -49,8 +49,9 @@ http://127.0.0.1:5000
 
 
 
-# ⚠️GET TOKEN COOKIE⚠️
-Get cookie and token via (GET TOKEN COOKIE)[https://chromewebstore.google.com/detail/get-token-cookie/naciaagbkifhpnoodlkhbejjldaiffcm]
+## ⚠️ Get Token and Cookie ⚠️
+
+To obtain your Facebook cookies and access token, you can use the [Get Token Cookie](https://chromewebstore.google.com/detail/get-token-cookie/naciaagbkifhpnoodlkhbejjldaiffcm) Chrome extension. Follow the instructions provided in the extension to retrieve the necessary credentials.
 
 
 ## Usage
