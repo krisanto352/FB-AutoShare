@@ -323,7 +323,7 @@ class LoginForm(FlaskForm):
 
 class ShareForm(FlaskForm):
     link = StringField('Post Link', validators=[DataRequired()])
-    limit = IntegerField('Share Limit', validators=[DataRequired(), NumberRange(min=1, max=100)])
+    limit = IntegerField('Share Limit', validators=[DataRequired(), NumberRange(min=1, max=100000)])
     submit = SubmitField('Share')
 
 class ConfigForm(FlaskForm):
