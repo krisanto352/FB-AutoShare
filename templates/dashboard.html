@@ -96,8 +96,8 @@
                         <label for="limit" class="form-label">
                             <i class="fas fa-hashtag me-1"></i> Share Limit
                         </label>
-                        {{ form.limit(class="form-control", placeholder="Number of times to share (1-100)", value="1") }}
-                        <div class="form-text text-info">How many times to share the post (1-100)</div>
+                        {{ form.limit(class="form-control", placeholder="Number of times to share (1-100k)", value="1") }}
+                        <div class="form-text text-info">How many times to share the post (1-100k)</div>
                         {% if form.limit.errors %}
                             <div class="text-danger mt-1">
                                 {% for error in form.limit.errors %}
@@ -141,9 +141,9 @@
                     return false;
                 }
 
-                if (!limit || isNaN(limit) || limit < 1 || limit > 100) {
+                if (!limit || isNaN(limit) || limit < 1 || limit > 100000) {
                     e.preventDefault();
-                    alert('Please enter a valid share limit between 1 and 100');
+                    alert('Please enter a valid share limit between 1 and 100000');
                     return false;
                 }
 
